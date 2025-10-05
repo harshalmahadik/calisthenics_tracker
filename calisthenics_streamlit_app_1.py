@@ -116,7 +116,7 @@ def extract_reps(rep_string):
 
 def main():
     st.set_page_config(page_title="Calisthenics Tracker", layout="centered")
-    st.title("🏋️ Calisthenics Muscle & Weight Gain Tracker (Local Image Version)")
+    st.title("🏋️ Calisthenics Muscle & Weight Gain Tracker")
 
     workout_schedule, exercises, nutrition, meal_plan = get_data()
     days = workout_schedule['Day'].tolist()
@@ -212,4 +212,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
