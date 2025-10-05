@@ -150,17 +150,35 @@ def main():
         st.success("This is a rest or recovery day! Hydrate and stretch.")
     else:
         st.subheader("Today's Recommended Exercises")
-        for i, row in exercises.iterrows():
-            ex = row['Exercise']
+
+        # Define exercise groups for each workout type
+        workout_exercises = {
+            'Upper Body': ['Push-ups', 'Pike Push-ups', 'Tricep Dips'],
+            'Lower Body': ['Squats', 'Lunges', 'Glute Bridges'],
+            'Full Body': ['Burpees', 'Mountain Climbers'],
+            'Upper Body Focus': ['Push-ups', 'Pike Push-ups', 'Tricep Dips', 'Plank'],
+            'Lower Body Focus': ['Squats', 'Lunges', 'Leg Raises'],
+            'Rest/Light Cardio': ['Plank', 'Mountain Climbers'],
+            'Rest': []
+        }
+
+    # Get current day’s exercises
+    today_workout = ws_row['Workout Type']
+    today_ex_list = workout_exercises.get(today_workout, [])
+
+    if not today_ex_list:
+        st.success("This is a rest or light recovery day! Hydrate and stretch.")
+    else:
+        for ex in today_ex_list:
+            row = exercises.loc[exercises['Exercise'] == ex].squeeze()
             st.markdown(f"#### {ex}")
-            # Find local image (supports .avif, .webp, etc.)
             image_path = find_image(ex.replace(" ", "-")) or find_image(ex.replace(" ", "_"))
             if image_path:
                 st.image(image_path, width=340, caption=exercise_info[ex]['desc'])
             else:
                 st.warning(f"Image not found for: {ex}")
             st.write(f"**Start:** {row['Week 1']} | **Progress Week 4:** {row['Week 4']}")
-
+            
     # --- Charts & Tables ---
     with st.expander("Show full weekly chart and nutrition plan"):
         st.write("#### Weekly Workout Duration")
@@ -194,3 +212,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
